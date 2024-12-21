@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: 'EB Garamond';
+}
+
+nav{
+    display: flex;
+    gap:30px; /* add distance between the words */
+    /* margin: auto; */
+}
+
+.nav-container{
+    display: flex; /* makes nav-container a flexbox */
+    justify-content: center; /* center the children (the nav) along the column axis */
+    /* align-items:center; */
+    width: 100%;
+    margin-top:40px;
+    /* height: 100vh;  view height - makes it 100% of the screen */
+}
+/* centering in html: make a div box on the outside and then make it a flexbox and then center the children */
+
+.container {
+    padding: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    max-width: 1200px;
+}
+
+a{
+    color:inherit; /* changes the font to black */
+    text-decoration:underline;
+}
