@@ -18,9 +18,10 @@ nav{
 .nav-container{
     display: flex; /* makes nav-container a flexbox */
     justify-content: center; /* center the children (the nav) along the column axis */
-    /* align-items:center; */
+    margin-bottom: 20px;
     width: 100%;
     margin-top:40px;
+    /* align-items:center; */
     /* height: 100vh;  view height - makes it 100% of the screen */
 }
 /* centering in html: make a div box on the outside and then make it a flexbox and then center the children */
@@ -29,11 +30,25 @@ nav{
     padding: 16px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 40px;
+    /*margin-top: 40px;*/
     max-width: 1200px;
 }
 
+.header {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px;
+}
+
+ul {
+    padding-left: 16px;     /* align bullets and header */       
+}
+
+li {
+    padding-left: 5px;      /* Add space between the bullet and the text */
+}
+
 a{
-    color:inherit; /* changes the font to black */
+    color:inherit;          /* changes the font to black */
     text-decoration:underline;
 }
