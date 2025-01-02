@@ -41,6 +41,18 @@ nav{
     max-width: 1200px;
 }
 
+.accordion {
+    padding: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px;
+    line-height: 175%
+}
+
+.accordion details {
+    padding: 4px;
+}
+
 ul {
     padding-left: 16px;     /* align bullets and header */       
 }
