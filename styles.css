@@ -61,6 +61,11 @@ li {
     padding-left: 5px;      /* Add space between the bullet and the text */
 }
 
+p {
+    line-height: 1.8;
+    margin-bottom: 4px;
+}
+
 a{
     color:inherit;          /* changes the font to black */
     text-decoration:underline;
