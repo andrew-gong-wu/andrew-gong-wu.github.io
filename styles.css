@@ -49,10 +49,6 @@ nav{
     line-height: 175%
 }
 
-.accordion details {
-    padding: 4px;
-}
-
 .accordion details[open] p {
     padding-top: 24px;  /* Adds top padding when the accordion is open */
     padding-bottom: 24px;  /* Adds bottom padding when the accordion is open */
