@@ -12,62 +12,172 @@ body{
 nav{
     display: flex;
     gap:30px; /* add distance between the words */
-    /* margin: auto; */
 }
 
+/* need to make sure the margins are a bit larger when the screen is slightly smaller, too */
+
+/* flexbox that has the nav bar at the top. centers children along column axis */
 .nav-container{
     display: flex; /* makes nav-container a flexbox */
     justify-content: center; /* center the children (the nav) along the column axis */
     margin-bottom: 20px;
     width: 100%;
     margin-top:40px;
-    /* align-items:center; */
-    /* height: 100vh;  view height - makes it 100% of the screen */
 }
-/* centering in html: make a div box on the outside and then make it a flexbox and then center the children */
 
+/* basic container */
 .container {
     padding: 16px;
+    padding-left: 32px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1200px;
+    max-width: 1400px;
     line-height: 175%
 }
 
+/* used to enclose headings <h1></h1> */
 .header {
     padding: 16px;
+    padding-left: 32px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1200px;
+    max-width: 1400px;
 }
 
+/* used to enclose the accordions - may reformat later */
 .accordion {
     padding: 16px;
+    padding-left: 32px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1200px;
+    max-width: 1400px;
     line-height: 175%
 }
 
+/* used to add padding on paragraphs for when accordions are open */
 .accordion details[open] p {
-    padding-top: 24px;  /* Adds top padding when the accordion is open */
-    padding-bottom: 24px;  /* Adds bottom padding when the accordion is open */
+    padding-top: 24px;  
+    padding-bottom: 24px;  
 }
 
+/* formatting for unordered lists to align bullets themselves with the rest of the text */
 ul {
-    padding-left: 16px;     /* align bullets and header */       
+    padding-left: 32px;         
 }
 
+/* Add space between the bullet and the text */
 li {
-    padding-left: 5px;      /* Add space between the bullet and the text */
+    padding-left: 5px;      
 }
 
+/* adjust height of paragraphs */
 p {
     line-height: 1.8;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
+/* changes the font to black */
 a{
-    color:inherit;          /* changes the font to black */
+    color:inherit;          
     text-decoration:underline;
+}
+
+/* ALL THE DROPDOWN STUFF */
+
+/* style the navigation links */
+nav a {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+    /*font-weight: bold;*/
+}
+
+/* style the dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* style the dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* style the links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* change the color of links when hovering over them */
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+/* show the dropdown when hovering over the dropdown link */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* ALL THE ANNOTATION STUFF */
+
+/* holds essay and sidebar */
+.annotated-container {
+    display: flex; /* make a flexbox */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px;
+    padding-left: 32px;
+    gap: 20px;
+}
+
+/* essay takes up 2/3 of width */
+.essay {
+    flex: 2; /* determines extra space a flex item takes up relative to other items. so flex: 2 means that it grows twice as fast as flex: 1 */
+    padding-right: 20px;
+    min-width: 0;
+    word-wrap: break-word;
+}
+
+/* sidebar takes up 1/3 of width */
+#sidebar { /* unique id, so use # not . */
+    flex: 1; /* grows half as fast as the .essay portion */
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* makes a nice box */
+    display: none; /* hides by default */
+    position: sticky; /* makes the sidebar scroll with the user */
+    top: 20px; /* distance from the top of the viewport */
+    height: calc(100vh - 40px); /* ensures the sidebar doesn't exceed the viewport height */
+    background-color: #f9f9f9; /* optional: gives the sidebar a nice background color */
+    overflow-y: auto; /* makes sidebar scrollable */
+}
+
+/* annotations should be normal when not hovered */
+.annotation:hover {
+    color: gray;
+    cursor: pointer;
+}
+/* annotations should be gray after clicked */
+.annotation.clicked {
+    color: gray;
+}
+
+/* this apparently does something for smaller screens */
+@media (max-width: 768px) {
+    .annotated-container {
+      flex-direction: column;
+    }
+  
+    #sidebar {
+      display: block;
+      margin-top: 20px;
+    }
 }
