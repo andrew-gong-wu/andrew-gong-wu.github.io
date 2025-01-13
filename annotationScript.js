@@ -1,4 +1,6 @@
-// JavaScript code to handle annotations
+
+// annotations contains all annotations for the essay
+
 const annotations = { 
     1: "Start with a bang. Reel them in. There are countless bad metaphors about beginnings, but they all express the same thing.", // JS object - works like a dictionary. key/value
     2: "Subversion of expectations!",
@@ -47,7 +49,7 @@ const annotations = {
   // note: a span is an inline HTML element used to group small pieces of text. allows us to apply special properties
   // in this case, apply the annotations
 
-  document.querySelectorAll('.annotation').forEach(span => { // selects all elements on this html page with class .annotation, and loops through them and does the function in {}
+  document.querySelectorAll('.annotation').forEach(span => { // selects all elements on page with class .annotation, and loops through and does the function in {}
     span.addEventListener('click', () => { // tells browser to listen for a click event on the span, then runs the function enclosed in {}
       const annotationId = span.getAttribute('data-annotation-id'); // declares a variable named annotationId and sets it to the data-annotation-id indicated above
       const annotationContent = annotations[annotationId]; // sets annotationContent to the value in the key/value pair in annotations
@@ -58,9 +60,8 @@ const annotations = {
   });
 
   function showSidebar(content) {
-    const sidebar = document.getElementById('sidebar');
+    const sidebar = document.getElementById('sidebar'); // sets sidebar to be the element on the page with id sidebar
 
-    // Set content and show sidebar
-    sidebar.innerHTML = `<p>${content}</p>`;
-    sidebar.style.display = 'block';
+    sidebar.innerHTML = `<p>${content}</p>`; // earlier we called showSidebar(annotationContent), so this just shows the annotation from annotations
+    sidebar.style.display = 'block'; // displays sidebar as a block
   }

@@ -90,13 +90,23 @@ nav a {
     padding: 10px 20px;
     text-decoration: none;
     color: #333;
-    /*font-weight: bold;*/
 }
 
 /* style the dropdown container */
 .dropdown {
     position: relative;
     display: inline-block;
+}
+
+/* style dropdown button */
+.dropdown-btn {
+    background-color: #f9f9f9;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: inherit;
+    border: none;
+    background-color: transparent;
 }
 
 /* style the dropdown content (hidden by default) */
@@ -122,11 +132,12 @@ nav a {
     background-color: #ddd;
 }
 
-/* show the dropdown when hovering over the dropdown link */
-.dropdown:hover .dropdown-content {
+/* show the dropdown-content when dropdown is open */
+.dropdown.open .dropdown-content {
     display: block;
 }
 
+/* mobile adjustments */
 @media (max-width: 768px) {
     .dropdown-content {
       position: static;
