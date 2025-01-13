@@ -127,6 +127,13 @@ nav a {
     display: block;
 }
 
+@media (max-width: 768px) {
+    .dropdown-content {
+      position: static;
+      box-shadow: none;
+    }
+}
+
 /* ALL THE ANNOTATION STUFF */
 
 /* holds essay and sidebar */
