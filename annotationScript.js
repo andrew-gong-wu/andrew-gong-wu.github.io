@@ -60,6 +60,7 @@ const annotations = {
     56: "One final return to simple vocabulary. Simple conclusions (and this is one!) deserve simple words.",
     57: "For rhythm and aesthetics: this sentence (and paragraph) feels clearly worse without this word.",
     58: "Passive voice. One of the times it seems good and necessary, to convey what the piece did <i>to me</i>. That sets the tone for the essay.",
+    59: "Starting without 'well' would be far too direct. This word also (in my mind) embodies a sort of narration-out-loud feel that I hope to consistently capture throughout the essay.",
   }; 
 
   // note: a span is an inline HTML element used to group small pieces of text. allows us to apply special properties
