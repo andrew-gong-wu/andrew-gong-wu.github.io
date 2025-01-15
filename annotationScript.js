@@ -59,7 +59,7 @@ const annotations = {
     55: "Good sounds: 's' to match 'listless, unsettling, pianissimo,' and the second syllable vowel matches the start of 'eternity.'",
     56: "One final return to simple vocabulary. Simple conclusions (and this is one!) deserve simple words.",
     57: "For rhythm and aesthetics: this sentence (and paragraph) feels clearly worse without this word.",
-    58: "Passive voice. One of the times it seems good and necessary, to convey, no matter how not-seriously, that the piece is acting <i>on me</i>, doing things <i>to me</i>. That sets the tone for the essay.",
+    58: "Passive voice. One of the times it seems good and necessary to convey, no matter how not-seriously, that the piece is acting <i>on me</i>, doing things <i>to me</i>. That sets the tone for the essay.",
     59: "Starting without 'well' would be far too direct. This word also (in my mind) embodies a sort of narration-out-loud feel that I hope to consistently capture throughout the essay.",
   }; 
 
