@@ -61,6 +61,8 @@ const annotations = {
     57: "For rhythm and aesthetics: this sentence (and paragraph) feels clearly worse without this word.",
     58: "Intentionally written passively. One of the times it seems good and necessary to convey, no matter how not-seriously, that the piece is acting <i>on me</i>, doing things <i>to me</i>. That sets the tone for the essay.",
     59: "Starting without 'well' would be far too direct. This word also (in my mind) embodies a sort of narration-out-loud feel that I hope to consistently capture throughout the essay.",
+    60: "I've written paragraphs that grow and swell and are struck down by a back-to-earth em dash twice previously: in paragraphs 5 and 9. <br><br>That's not what happens here. These next few words pulse with energy and intensity and conviction.",
+    61: "One way you can use italics is as a 'change-of-voice.' This time, I'm switching from organized-narrator-voice to raw-emotion-human-voice. If you look back through the essay, you'll see that I've used italics to switch into frustrated-pianist-voice, enamored-fanboy-voice, and more.",
   }; 
 
   // note: a span is an inline HTML element used to group small pieces of text. allows us to apply special properties
