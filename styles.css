@@ -29,7 +29,8 @@ nav{
 /* basic container */
 .container {
     padding: 16px;
-    padding-left: 32px;
+    padding-left: 48px;
+    padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
     max-width: 1400px;
@@ -39,7 +40,8 @@ nav{
 /* used to enclose headings <h1></h1> */
 .header {
     padding: 16px;
-    padding-left: 32px;
+    padding-left: 48px;
+    padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
     max-width: 1400px;
@@ -48,7 +50,8 @@ nav{
 /* used to enclose the accordions - may reformat later */
 .accordion {
     padding: 16px;
-    padding-left: 32px;
+    padding-left: 48px;
+    padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
     max-width: 1400px;
@@ -63,7 +66,7 @@ nav{
 
 /* formatting for unordered lists to align bullets themselves with the rest of the text */
 ul {
-    padding-left: 32px;         
+    padding-left: 16px;         
 }
 
 /* Add space between the bullet and the text */
@@ -154,7 +157,8 @@ nav a {
     max-width: 1400px;
     margin: 0 auto;
     padding: 16px;
-    padding-left: 32px;
+    padding-left: 48px;
+    padding-right: 48px;
     gap: 20px;
 }
 
