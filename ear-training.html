@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ear Training</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .app-wrapper {
+            max-width: 680px;
+        }
+
+        /* Progress row */
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin-bottom: 1.2rem;
+        }
+        .question-counter {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            min-width: 6.5rem;
+        }
+        .progress-bar-wrap {
+            flex: 1;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: #7c3aed;
+            border-radius: 2px;
+            transition: width 0.35s ease;
+            width: 0%;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat { text-align: center; }
+        .stat-value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #7c3aed;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.2rem;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.7rem 1.4rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'EB Garamond', Georgia, serif;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s, opacity 0.15s;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        .btn:active:not(:disabled) { transform: scale(0.96); }
+        .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        .btn-primary { background: #7c3aed; color: #fff; min-width: 160px; }
+        .btn-primary:hover:not(:disabled) { background: #6d28d9; }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+        .btn-secondary:hover:not(:disabled) { background: #eee; }
+
+        /* Mode buttons */
+        .mode-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.4rem;
+            flex-wrap: wrap;
+        }
+        .mode-btn {
+            padding: 0.45rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f9f9f9;
+            color: #666;
+            font-size: 0.82rem;
+            font-family: 'EB Garamond', Georgia, serif;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-weight: 500;
+        }
+        .mode-btn:hover { background: #f0f0f0; color: #333; }
+        .mode-btn.active { background: #ede9fe; color: #7c3aed; border-color: #7c3aed; }
+
+        /* Interval grid */
+        .intervals-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+            margin-bottom: 1.4rem;
+        }
+        @media (max-width: 480px) {
+            .intervals-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .interval-btn {
+            padding: 0.7rem 0.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #fafafa;
+            color: #555;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.1s;
+            text-align: center;
+            font-family: 'EB Garamond', Georgia, serif;
+        }
+        .interval-btn:hover:not(:disabled) {
+            border-color: #7c3aed;
+            background: #f5f0ff;
+            color: #333;
+        }
+        .interval-btn:active:not(:disabled) { transform: scale(0.95); }
+        .interval-btn:disabled { cursor: not-allowed; }
+
+        .interval-btn.correct     { background: #ecfdf5; border-color: #10b981; color: #065f46; }
+        .interval-btn.wrong-guess { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+        .interval-btn.reveal      { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
+
+        .int-short { display: block; font-size: 1.15rem; font-weight: 700; line-height: 1; }
+        .int-name  { display: block; font-size: 0.65rem; opacity: 0.65; margin-top: 0.25rem; line-height: 1.2; }
+
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 600;
+            min-height: 1.4em;
+            margin-bottom: 1rem;
+        }
+        .feedback.correct { color: #10b981; }
+        .feedback.wrong   { color: #ef4444; }
+
+        /* Round complete panel */
+        .round-complete {
+            background: #f9f6ff;
+            border: 1px solid #c4b5fd;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin-bottom: 1.4rem;
+        }
+        .round-complete h2 { font-size: 1.4rem; color: #7c3aed; margin-bottom: 0.4rem; }
+        .rc-score { font-size: 3rem; font-weight: 700; color: #6d28d9; margin: 0.4rem 0; }
+        .rc-pct   { font-size: 1.1rem; color: #888; margin-bottom: 0.2rem; }
+        .rc-time  { font-size: 0.9rem; color: #aaa; margin-bottom: 0.3rem; }
+        .rc-msg   { font-size: 0.88rem; color: #aaa; margin-bottom: 1.4rem; }
+
+        /* History dots */
+        .history {
+            display: flex;
+            gap: 0.35rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            min-height: 12px;
+            margin-top: 1rem;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .dot.correct { background: #10b981; }
+        .dot.wrong   { background: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="now.html">Now</a>
+            <div class="dropdown">
+                <button class="dropdown-btn">Music</button>
+                <div class="dropdown-content">
+                    <a href="music.html">Recordings</a>
+                    <a href="ear-training.html">Ear Training</a>
+                </div>
+            </div>
+            <a href="favorites.html">Favorites</a>
+            <a href="blog.html">Blog</a>
+            <a href="college-consulting.html">College Consulting</a>
+            <div class="dropdown">
+                <button class="dropdown-btn">Other</button>
+                <div class="dropdown-content">
+                    <a href="other-how-i-write.html">How I Write</a>
+                    <a href="other-geometry-problems.html">Geometry Problems</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="header">
+        <h1>Ear Training</h1>
+    </div>
+    <div class="container">
+        <div class="app-wrapper">
+
+            <div class="progress-row">
+                <div class="question-counter" id="questionCounter">Ready</div>
+                <div class="progress-bar-wrap">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="statCorrect">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="statPct">&mdash;</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="statTime">&mdash;</div>
+                    <div class="stat-label">Time</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="playBtn">&#9654;&ensp;Play Interval</button>
+                <button class="btn btn-secondary" id="replayBtn" disabled>&#x21ba;&ensp;Replay</button>
+            </div>
+
+            <div class="mode-row">
+                <button class="mode-btn active" data-mode="ascending">&#8593; Ascending</button>
+                <button class="mode-btn" data-mode="descending">&#8595; Descending</button>
+                <button class="mode-btn" data-mode="harmonic">&#8801; Harmonic</button>
+            </div>
+
+            <div class="intervals-grid" id="grid"></div>
+            <div class="feedback" id="feedback"></div>
+
+            <div class="round-complete" id="roundComplete" hidden>
+                <h2>Round Complete</h2>
+                <div class="rc-score" id="rcScore"></div>
+                <div class="rc-pct"   id="rcPct"></div>
+                <div class="rc-time"  id="rcTime"></div>
+                <div class="rc-msg"   id="rcMsg"></div>
+                <button class="btn btn-primary" id="newRoundBtn">&#9654;&ensp;Start New Round</button>
+            </div>
+
+            <div class="history" id="history"></div>
+
+        </div>
+    </div>
+
+<script>
+'use strict';
+
+const ROUND_SIZE = 20;
+
+const INTERVALS = [
+  { semitones:  1, short: 'm2', name: 'Minor 2nd'   },
+  { semitones:  2, short: 'M2', name: 'Major 2nd'   },
+  { semitones:  3, short: 'm3', name: 'Minor 3rd'   },
+  { semitones:  4, short: 'M3', name: 'Major 3rd'   },
+  { semitones:  5, short: 'P4', name: 'Perfect 4th' },
+  { semitones:  6, short: 'TT', name: 'Tritone'     },
+  { semitones:  7, short: 'P5', name: 'Perfect 5th' },
+  { semitones:  8, short: 'm6', name: 'Minor 6th'   },
+  { semitones:  9, short: 'M6', name: 'Major 6th'   },
+  { semitones: 10, short: 'm7', name: 'Minor 7th'   },
+  { semitones: 11, short: 'M7', name: 'Major 7th'   },
+  { semitones: 12, short: 'P8', name: 'Octave'      },
+];
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let audioCtx        = null;
+let masterGain      = null;
+let activeOscillators = [];
+
+let mode     = 'ascending';
+let current  = null;
+
+let appState = 'idle';
+
+let roundQ       = 0;
+let roundCorrect = 0;
+let allHistory   = [];
+
+// ─── Timer ────────────────────────────────────────────────────────────────────
+let roundStartMs  = null;
+let timerInterval = null;
+
+function startTimer() {
+  roundStartMs = Date.now();
+  timerInterval = setInterval(tickTimer, 500);
+  tickTimer();
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+function tickTimer() {
+  if (roundStartMs === null) return;
+  document.getElementById('statTime').textContent = formatElapsed(Date.now() - roundStartMs);
+}
+
+function formatElapsed(ms) {
+  const s   = Math.floor(ms / 1000);
+  const min = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${min}:${sec.toString().padStart(2, '0')}`;
+}
+
+// ─── Audio ────────────────────────────────────────────────────────────────────
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function getMaster() {
+  const ctx = getCtx();
+  if (!masterGain) {
+    masterGain = ctx.createGain();
+    masterGain.gain.value = 1;
+    masterGain.connect(ctx.destination);
+  }
+  return masterGain;
+}
+
+function stopAllAudio() {
+  const ctx  = getCtx();
+  const mg   = getMaster();
+  const now  = ctx.currentTime;
+
+  mg.gain.cancelScheduledValues(now);
+  mg.gain.setValueAtTime(mg.gain.value, now);
+  mg.gain.linearRampToValueAtTime(0, now + 0.02);
+
+  const toStop = activeOscillators.splice(0);
+  setTimeout(() => {
+    toStop.forEach(osc => { try { osc.stop(); } catch (_) {} });
+    mg.gain.cancelScheduledValues(ctx.currentTime);
+    mg.gain.setValueAtTime(1, ctx.currentTime);
+  }, 30);
+}
+
+function makePianoTone(ctx, freq, startTime, durSec) {
+  const B    = 0.00015;
+  const peak = 0.17;
+
+  const partials = [
+    [ 1, 1.000, 1.00],
+    [ 2, 0.500, 0.70],
+    [ 3, 0.300, 0.52],
+    [ 4, 0.170, 0.40],
+    [ 5, 0.095, 0.31],
+    [ 6, 0.055, 0.25],
+    [ 7, 0.032, 0.20],
+    [ 8, 0.019, 0.16],
+    [ 9, 0.011, 0.13],
+    [10, 0.006, 0.11],
+  ];
+
+  partials.forEach(([n, amp, decF]) => {
+    const f        = freq * n * Math.sqrt(1 + B * n * n);
+    const decayEnd = startTime + durSec * decF;
+
+    const osc = ctx.createOscillator();
+    const g   = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = f;
+
+    g.gain.setValueAtTime(0, startTime);
+    g.gain.linearRampToValueAtTime(amp * peak, startTime + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, decayEnd);
+
+    osc.connect(g);
+    g.connect(getMaster());
+    osc.start(startTime);
+    osc.stop(decayEnd + 0.05);
+    activeOscillators.push(osc);
+  });
+}
+
+function centsToRatio(c) { return Math.pow(2, c / 1200); }
+
+function playInterval({ interval, baseFreq, offsetCents }) {
+  stopAllAudio();
+
+  const ctx = getCtx();
+  const now = ctx.currentTime + 0.06;
+  const dur = 2.6;
+
+  const f1 = baseFreq * centsToRatio(offsetCents);
+  const f2 = f1 * Math.pow(2, interval.semitones / 12);
+
+  if (mode === 'ascending') {
+    makePianoTone(ctx, f1, now,       dur);
+    makePianoTone(ctx, f2, now + 1.7, dur);
+  } else if (mode === 'descending') {
+    makePianoTone(ctx, f2, now,       dur);
+    makePianoTone(ctx, f1, now + 1.7, dur);
+  } else {
+    makePianoTone(ctx, f1, now, dur * 1.3);
+    makePianoTone(ctx, f2, now, dur * 1.3);
+  }
+}
+
+// ─── Round / question logic ───────────────────────────────────────────────────
+function newQuestion() {
+  if (roundQ === 0) startTimer();
+
+  const interval    = INTERVALS[Math.floor(Math.random() * INTERVALS.length)];
+  const baseMidi    = 48 + Math.floor(Math.random() * 24);
+  const baseFreq    = 440 * Math.pow(2, (baseMidi - 69) / 12);
+  const sign        = Math.random() < 0.5 ? 1 : -1;
+  const offsetCents = sign * (25 + Math.random() * 50);
+
+  current  = { interval, baseFreq, offsetCents };
+  appState = 'active';
+
+  document.querySelectorAll('.interval-btn').forEach(btn => {
+    btn.className = 'interval-btn';
+    btn.disabled  = false;
+  });
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className   = 'feedback';
+  document.getElementById('replayBtn').disabled   = false;
+  document.getElementById('playBtn').textContent  = 'Next Interval \u2192';
+
+  updateProgress();
+  playInterval(current);
+}
+
+function resolveQuestion(guessedSemitones) {
+  if (appState !== 'active') return;
+  appState = 'answered';
+  roundQ++;
+
+  const skipped = guessedSemitones === null;
+  const correct = !skipped && guessedSemitones === current.interval.semitones;
+  if (correct) roundCorrect++;
+  allHistory.push(correct);
+
+  document.querySelectorAll('.interval-btn').forEach(btn => {
+    const s = +btn.dataset.semitones;
+    btn.disabled = true;
+    if (s === current.interval.semitones) {
+      btn.classList.add(correct ? 'correct' : 'reveal');
+    } else if (s === guessedSemitones && !correct) {
+      btn.classList.add('wrong-guess');
+    }
+  });
+
+  const fb = document.getElementById('feedback');
+  if (skipped) {
+    fb.textContent = `Skipped \u2014 it was ${current.interval.name}`;
+    fb.className   = 'feedback wrong';
+  } else if (correct) {
+    fb.textContent = `\u2713 ${current.interval.name}`;
+    fb.className   = 'feedback correct';
+  } else {
+    fb.textContent = `\u2717 That was ${current.interval.name}`;
+    fb.className   = 'feedback wrong';
+  }
+
+  updateStats();
+  updateHistory();
+  updateProgress();
+
+  if (roundQ >= ROUND_SIZE) {
+    stopTimer();
+    document.getElementById('playBtn').disabled = true;
+    setTimeout(showRoundComplete, 800);
+  } else {
+    document.getElementById('playBtn').textContent = '\u25b6\u2002Next Interval';
+  }
+}
+
+function showRoundComplete() {
+  const pct      = Math.round(roundCorrect / ROUND_SIZE * 100);
+  const elapsed  = roundStartMs !== null ? formatElapsed(Date.now() - roundStartMs) : '\u2014';
+  const msgs = [
+    [90, 'Outstanding \u2014 your relative pitch is razor-sharp.'],
+    [70, 'Great work! You have a solid ear.'],
+    [50, 'Good effort. Keep training and you will improve.'],
+    [ 0, 'Keep at it \u2014 relative pitch takes practice!'],
+  ];
+  const msg = msgs.find(([t]) => pct >= t)[1];
+
+  document.getElementById('rcScore').textContent = `${roundCorrect}\u202f/\u202f${ROUND_SIZE}`;
+  document.getElementById('rcPct').textContent   = `${pct}% correct`;
+  document.getElementById('rcTime').textContent  = `Completed in ${elapsed}`;
+  document.getElementById('rcMsg').textContent   = msg;
+  document.getElementById('roundComplete').hidden = false;
+  document.getElementById('playBtn').hidden       = true;
+  document.getElementById('replayBtn').disabled   = true;
+}
+
+function startNewRound() {
+  stopTimer();
+  roundQ        = 0;
+  roundCorrect  = 0;
+  roundStartMs  = null;
+  appState      = 'idle';
+  current       = null;
+
+  document.getElementById('roundComplete').hidden = true;
+  document.getElementById('playBtn').hidden       = false;
+  document.getElementById('playBtn').disabled     = false;
+  document.getElementById('playBtn').textContent  = '\u25b6\u2002Play Interval';
+  document.getElementById('replayBtn').disabled   = true;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className   = 'feedback';
+  document.getElementById('statTime').textContent = '\u2014';
+
+  document.querySelectorAll('.interval-btn').forEach(btn => {
+    btn.className = 'interval-btn';
+    btn.disabled  = true;
+  });
+
+  updateProgress();
+}
+
+// ─── UI helpers ───────────────────────────────────────────────────────────────
+function updateStats() {
+  const total   = allHistory.length;
+  const correct = allHistory.filter(Boolean).length;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statTotal').textContent   = total;
+  document.getElementById('statPct').textContent     =
+    total > 0 ? Math.round(correct / total * 100) + '%' : '\u2014';
+}
+
+function updateHistory() {
+  document.getElementById('history').innerHTML =
+    allHistory.slice(-30).map(c =>
+      `<div class="dot ${c ? 'correct' : 'wrong'}"></div>`
+    ).join('');
+}
+
+function updateProgress() {
+  document.getElementById('progressFill').style.width =
+    (roundQ / ROUND_SIZE * 100) + '%';
+
+  let label;
+  if (appState === 'idle' && roundQ === 0) {
+    label = 'Ready';
+  } else if (appState === 'active') {
+    label = `Question ${roundQ + 1}\u202fof\u202f${ROUND_SIZE}`;
+  } else if (roundQ >= ROUND_SIZE) {
+    label = 'Round complete';
+  } else {
+    label = `Question ${roundQ}\u202fof\u202f${ROUND_SIZE}`;
+  }
+  document.getElementById('questionCounter').textContent = label;
+}
+
+// ─── Build interval grid ──────────────────────────────────────────────────────
+(function buildGrid() {
+  const grid = document.getElementById('grid');
+  INTERVALS.forEach(interval => {
+    const btn = document.createElement('button');
+    btn.className         = 'interval-btn';
+    btn.dataset.semitones = interval.semitones;
+    btn.disabled          = true;
+    btn.innerHTML =
+      `<span class="int-short">${interval.short}</span>` +
+      `<span class="int-name">${interval.name}</span>`;
+    btn.addEventListener('click', () => resolveQuestion(interval.semitones));
+    grid.appendChild(btn);
+  });
+})();
+
+// ─── Event wiring ─────────────────────────────────────────────────────────────
+document.getElementById('playBtn').addEventListener('click', () => {
+  if (appState === 'active') {
+    resolveQuestion(null);
+  } else {
+    newQuestion();
+  }
+});
+
+document.getElementById('replayBtn').addEventListener('click', () => {
+  if (current) playInterval(current);
+});
+
+document.getElementById('newRoundBtn').addEventListener('click', startNewRound);
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+const KEY_MAP = { '1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'0':10,'-':11,'=':12 };
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'BUTTON') return;
+  if (e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    document.getElementById('playBtn').click();
+    return;
+  }
+  const s = KEY_MAP[e.key];
+  if (s !== undefined) resolveQuestion(s);
+});
+</script>
+    <script src="otherDropdown.js"></script>
+</body>
+</html>
