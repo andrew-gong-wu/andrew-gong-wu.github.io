@@ -93,6 +93,29 @@
         }
         .btn-secondary:hover:not(:disabled) { background: #eee; }
 
+        /* Level buttons */
+        .level-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .level-btn {
+            padding: 0.5rem 1.25rem;
+            border: 1.5px solid #ddd;
+            border-radius: 7px;
+            background: #f9f9f9;
+            color: #555;
+            font-size: 0.88rem;
+            font-family: 'EB Garamond', Georgia, serif;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-weight: 600;
+        }
+        .level-btn:hover { background: #f0f0f0; color: #333; }
+        .level-btn.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+
         /* Mode buttons */
         .mode-row {
             display: flex;
@@ -116,15 +139,29 @@
         .mode-btn:hover { background: #f0f0f0; color: #333; }
         .mode-btn.active { background: #ede9fe; color: #7c3aed; border-color: #7c3aed; }
 
-        /* Interval grid */
-        .intervals-grid {
+        /* Prevent display:flex from overriding the hidden attribute */
+        [hidden] { display: none !important; }
+
+        /* Voicing buttons (share mode-btn look) */
+        .voicing-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.4rem;
+        }
+
+        /* Answer grid */
+        .answer-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
             gap: 0.6rem;
             margin-bottom: 1.4rem;
         }
+        .answer-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+        .answer-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .answer-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
         @media (max-width: 480px) {
-            .intervals-grid { grid-template-columns: repeat(3, 1fr); }
+            .answer-grid.cols-4 { grid-template-columns: repeat(3, 1fr); }
+            .answer-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
         }
 
         .interval-btn {
@@ -254,13 +291,24 @@
                 <button class="btn btn-secondary" id="replayBtn" disabled>&#x21ba;&ensp;Replay</button>
             </div>
 
+            <div class="level-row">
+                <button class="level-btn active" data-level="intervals">Intervals</button>
+                <button class="level-btn" data-level="triads">Triads</button>
+                <button class="level-btn" data-level="sevenths">7th Chords</button>
+            </div>
+
             <div class="mode-row">
                 <button class="mode-btn active" data-mode="ascending">&#8593; Ascending</button>
                 <button class="mode-btn" data-mode="descending">&#8595; Descending</button>
                 <button class="mode-btn" data-mode="harmonic">&#8801; Harmonic</button>
             </div>
 
-            <div class="intervals-grid" id="grid"></div>
+            <div class="voicing-row" id="voicingRow" hidden>
+                <button class="mode-btn active" data-voicing="closed">Closed voicing</button>
+                <button class="mode-btn" data-voicing="open">Open voicing</button>
+            </div>
+
+            <div class="answer-grid cols-4" id="grid"></div>
             <div class="feedback" id="feedback"></div>
 
             <div class="round-complete" id="roundComplete" hidden>
@@ -282,6 +330,8 @@
 
 const ROUND_SIZE = 20;
 
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
 const INTERVALS = [
   { semitones:  1, short: 'm2', name: 'Minor 2nd'   },
   { semitones:  2, short: 'M2', name: 'Major 2nd'   },
@@ -297,15 +347,111 @@ const INTERVALS = [
   { semitones: 12, short: 'P8', name: 'Octave'      },
 ];
 
+// Semitone offsets from the bass note for each inversion (close position).
+const TRIADS = [
+  {
+    id: 'major', short: 'Maj', name: 'Major',
+    inversions: [
+      [0, 4, 7],  // root
+      [0, 3, 8],  // 1st  (3rd in bass)
+      [0, 5, 9],  // 2nd  (5th in bass)
+    ],
+  },
+  {
+    id: 'minor', short: 'min', name: 'Minor',
+    inversions: [
+      [0, 3, 7],  // root
+      [0, 4, 9],  // 1st
+      [0, 5, 8],  // 2nd
+    ],
+  },
+  {
+    id: 'augmented', short: 'Aug', name: 'Augmented',
+    inversions: [
+      [0, 4, 8],  // root (all inversions sound identical)
+      [0, 4, 8],
+      [0, 4, 8],
+    ],
+  },
+  {
+    id: 'diminished', short: 'dim', name: 'Diminished',
+    inversions: [
+      [0, 3, 6],  // root
+      [0, 3, 9],  // 1st
+      [0, 6, 9],  // 2nd
+    ],
+  },
+];
+
+const SEVENTHS = [
+  {
+    id: 'maj7', short: 'Maj7', name: 'Major 7th',
+    inversions: [
+      [0, 4,  7, 11],  // root
+      [0, 3,  7,  8],  // 1st
+      [0, 4,  5,  9],  // 2nd
+      [0, 1,  5,  8],  // 3rd
+    ],
+  },
+  {
+    id: 'dom7', short: 'Dom7', name: 'Dominant 7th',
+    inversions: [
+      [0, 4,  7, 10],  // root
+      [0, 3,  6,  8],  // 1st
+      [0, 3,  5,  9],  // 2nd
+      [0, 2,  6,  9],  // 3rd
+    ],
+  },
+  {
+    id: 'minmaj7', short: 'mMaj7', name: 'Minor-Major 7th',
+    inversions: [
+      [0, 3,  7, 11],  // root
+      [0, 4,  8,  9],  // 1st
+      [0, 4,  5,  8],  // 2nd
+      [0, 1,  4,  8],  // 3rd
+    ],
+  },
+  {
+    id: 'min7', short: 'min7', name: 'Minor 7th',
+    inversions: [
+      [0, 3,  7, 10],  // root
+      [0, 4,  7,  9],  // 1st
+      [0, 3,  5,  8],  // 2nd
+      [0, 2,  5,  9],  // 3rd
+    ],
+  },
+  {
+    id: 'halfdim7', short: '\u00f87', name: 'Half-Diminished 7th',
+    inversions: [
+      [0, 3,  6, 10],  // root
+      [0, 3,  7,  9],  // 1st
+      [0, 4,  6,  9],  // 2nd
+      [0, 2,  5,  8],  // 3rd
+    ],
+  },
+  {
+    id: 'dim7', short: 'dim7', name: 'Diminished 7th',
+    inversions: [
+      [0, 3, 6, 9],    // all inversions identical (fully symmetric)
+      [0, 3, 6, 9],
+      [0, 3, 6, 9],
+      [0, 3, 6, 9],
+    ],
+  },
+];
+
 // ─── State ────────────────────────────────────────────────────────────────────
-let audioCtx        = null;
-let masterGain      = null;
+let audioCtx          = null;
+let masterGain        = null;
 let activeOscillators = [];
 
+let level    = 'intervals';
 let mode     = 'ascending';
+let voicing  = 'closed';
 let current  = null;
-
 let appState = 'idle';
+
+let prevOffsetCents = null;
 
 let roundQ       = 0;
 let roundCorrect = 0;
@@ -316,7 +462,7 @@ let roundStartMs  = null;
 let timerInterval = null;
 
 function startTimer() {
-  roundStartMs = Date.now();
+  roundStartMs  = Date.now();
   timerInterval = setInterval(tickTimer, 500);
   tickTimer();
 }
@@ -356,9 +502,9 @@ function getMaster() {
 }
 
 function stopAllAudio() {
-  const ctx  = getCtx();
-  const mg   = getMaster();
-  const now  = ctx.currentTime;
+  const ctx = getCtx();
+  const mg  = getMaster();
+  const now = ctx.currentTime;
 
   mg.gain.cancelScheduledValues(now);
   mg.gain.setValueAtTime(mg.gain.value, now);
@@ -412,6 +558,42 @@ function makePianoTone(ctx, freq, startTime, durSec) {
 
 function centsToRatio(c) { return Math.pow(2, c / 1200); }
 
+// ─── Offset generation ────────────────────────────────────────────────────────
+// Returns a random signed offset in ±[25, 75] cents.
+// Rejects any candidate within 15 cents of the previous offset (up to 100 tries).
+function newOffsetCents() {
+  for (let i = 0; i < 100; i++) {
+    const sign   = Math.random() < 0.5 ? 1 : -1;
+    const offset = sign * (25 + Math.random() * 50);
+    if (prevOffsetCents === null || Math.abs(offset - prevOffsetCents) > 15) {
+      prevOffsetCents = offset;
+      return offset;
+    }
+  }
+  // Unreachable in practice; valid range is always ≥ 70 % of the total range.
+  const offset = (Math.random() < 0.5 ? 1 : -1) * (25 + Math.random() * 50);
+  prevOffsetCents = offset;
+  return offset;
+}
+
+// ─── Open voicing ─────────────────────────────────────────────────────────────
+// Given a close-position semitone array [0, a, b, ...] (bass fixed at 0),
+// returns an ascending sequence using a random permutation of the non-bass
+// pitch classes.  Each step is ((pc - prevPC) mod 12) ∈ [1,11], so consecutive
+// gaps never exceed 11 semitones.
+function openVoicing(closePositionSemitones) {
+  const perm = shuffle(closePositionSemitones.slice(1));
+  const result = [0];
+  let pos = 0;
+  for (const pc of perm) {
+    const step = ((pc - (pos % 12)) % 12 + 12) % 12 || 12;
+    pos += step;
+    result.push(pos);
+  }
+  return result;
+}
+
+// Play a two-note interval (ascending / descending / harmonic).
 function playInterval({ interval, baseFreq, offsetCents }) {
   stopAllAudio();
 
@@ -434,17 +616,78 @@ function playInterval({ interval, baseFreq, offsetCents }) {
   }
 }
 
+// Play a chord (triad or seventh) given an ordered array of semitone offsets.
+// For ascending/descending the notes are arpeggiated in the given order;
+// for harmonic all notes sound simultaneously.
+function playChord({ semitones, baseFreq, offsetCents }) {
+  stopAllAudio();
+
+  const ctx    = getCtx();
+  const now    = ctx.currentTime + 0.06;
+  const dur    = 2.6;
+  const baseF  = baseFreq * centsToRatio(offsetCents);
+  const spacing = 0.55;
+
+  const freqs = semitones.map(s => baseF * Math.pow(2, s / 12));
+
+  if (mode === 'harmonic') {
+    freqs.forEach(f => makePianoTone(ctx, f, now, dur * 1.3));
+  } else if (mode === 'ascending') {
+    freqs.forEach((f, i) => makePianoTone(ctx, f, now + i * spacing, dur));
+  } else {
+    freqs.slice().reverse().forEach((f, i) => makePianoTone(ctx, f, now + i * spacing, dur));
+  }
+}
+
+function playCurrentQuestion() {
+  if (!current) return;
+  if (current.type === 'interval') {
+    playInterval(current);
+  } else {
+    playChord(current);
+  }
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function getLevelLabel() {
+  if (level === 'intervals') return 'Interval';
+  if (level === 'triads')    return 'Triad';
+  return 'Chord';
+}
+
 // ─── Round / question logic ───────────────────────────────────────────────────
 function newQuestion() {
   if (roundQ === 0) startTimer();
 
-  const interval    = INTERVALS[Math.floor(Math.random() * INTERVALS.length)];
   const baseMidi    = 48 + Math.floor(Math.random() * 24);
   const baseFreq    = 440 * Math.pow(2, (baseMidi - 69) / 12);
-  const sign        = Math.random() < 0.5 ? 1 : -1;
-  const offsetCents = sign * (25 + Math.random() * 50);
+  const offsetCents = newOffsetCents();
 
-  current  = { interval, baseFreq, offsetCents };
+  if (level === 'intervals') {
+    const interval = INTERVALS[Math.floor(Math.random() * INTERVALS.length)];
+    current = { type: 'interval', interval, baseFreq, offsetCents };
+
+  } else if (level === 'triads') {
+    const chord     = TRIADS[Math.floor(Math.random() * TRIADS.length)];
+    const inv       = chord.inversions[Math.floor(Math.random() * chord.inversions.length)];
+    const semitones = voicing === 'open' ? openVoicing(inv) : [...inv];
+    current = { type: 'triad', chord, semitones, baseFreq, offsetCents };
+
+  } else {
+    const chord     = SEVENTHS[Math.floor(Math.random() * SEVENTHS.length)];
+    const inv       = chord.inversions[Math.floor(Math.random() * chord.inversions.length)];
+    const semitones = voicing === 'open' ? openVoicing(inv) : [...inv];
+    current = { type: 'seventh', chord, semitones, baseFreq, offsetCents };
+  }
+
   appState = 'active';
 
   document.querySelectorAll('.interval-btn').forEach(btn => {
@@ -454,41 +697,53 @@ function newQuestion() {
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className   = 'feedback';
   document.getElementById('replayBtn').disabled   = false;
-  document.getElementById('playBtn').textContent  = 'Next Interval \u2192';
+  document.getElementById('playBtn').textContent  = 'Skip \u2192';
 
   updateProgress();
-  playInterval(current);
+  playCurrentQuestion();
 }
 
-function resolveQuestion(guessedSemitones) {
+function resolveQuestion(guess) {
   if (appState !== 'active') return;
   appState = 'answered';
   roundQ++;
 
-  const skipped = guessedSemitones === null;
-  const correct = !skipped && guessedSemitones === current.interval.semitones;
+  const skipped = guess === null;
+  let correctId, correctName;
+
+  if (level === 'intervals') {
+    correctId   = current.interval.semitones;   // number
+    correctName = current.interval.name;
+  } else {
+    correctId   = current.chord.id;             // string
+    correctName = current.chord.name;
+  }
+
+  const correct = !skipped && guess === correctId;
   if (correct) roundCorrect++;
   allHistory.push(correct);
 
   document.querySelectorAll('.interval-btn').forEach(btn => {
-    const s = +btn.dataset.semitones;
     btn.disabled = true;
-    if (s === current.interval.semitones) {
+    // dataset values are always strings; coerce for interval comparison
+    const btnId = level === 'intervals' ? +btn.dataset.id : btn.dataset.id;
+    if (btnId === correctId) {
       btn.classList.add(correct ? 'correct' : 'reveal');
-    } else if (s === guessedSemitones && !correct) {
+    } else if (btnId === guess && !correct) {
       btn.classList.add('wrong-guess');
     }
   });
 
-  const fb = document.getElementById('feedback');
+  const fb      = document.getElementById('feedback');
+  const article = level === 'intervals' ? '' : 'a ';
   if (skipped) {
-    fb.textContent = `Skipped \u2014 it was ${current.interval.name}`;
+    fb.textContent = `Skipped \u2014 it was ${article}${correctName}`;
     fb.className   = 'feedback wrong';
   } else if (correct) {
-    fb.textContent = `\u2713 ${current.interval.name}`;
+    fb.textContent = `\u2713 ${correctName}`;
     fb.className   = 'feedback correct';
   } else {
-    fb.textContent = `\u2717 That was ${current.interval.name}`;
+    fb.textContent = `\u2717 That was ${article}${correctName}`;
     fb.className   = 'feedback wrong';
   }
 
@@ -501,13 +756,14 @@ function resolveQuestion(guessedSemitones) {
     document.getElementById('playBtn').disabled = true;
     setTimeout(showRoundComplete, 800);
   } else {
-    document.getElementById('playBtn').textContent = '\u25b6\u2002Next Interval';
+    document.getElementById('playBtn').textContent =
+      `\u25b6\u2002Next ${getLevelLabel()}`;
   }
 }
 
 function showRoundComplete() {
-  const pct      = Math.round(roundCorrect / ROUND_SIZE * 100);
-  const elapsed  = roundStartMs !== null ? formatElapsed(Date.now() - roundStartMs) : '\u2014';
+  const pct     = Math.round(roundCorrect / ROUND_SIZE * 100);
+  const elapsed = roundStartMs !== null ? formatElapsed(Date.now() - roundStartMs) : '\u2014';
   const msgs = [
     [90, 'Outstanding \u2014 your relative pitch is razor-sharp.'],
     [70, 'Great work! You have a solid ear.'],
@@ -516,10 +772,10 @@ function showRoundComplete() {
   ];
   const msg = msgs.find(([t]) => pct >= t)[1];
 
-  document.getElementById('rcScore').textContent = `${roundCorrect}\u202f/\u202f${ROUND_SIZE}`;
-  document.getElementById('rcPct').textContent   = `${pct}% correct`;
-  document.getElementById('rcTime').textContent  = `Completed in ${elapsed}`;
-  document.getElementById('rcMsg').textContent   = msg;
+  document.getElementById('rcScore').textContent  = `${roundCorrect}\u202f/\u202f${ROUND_SIZE}`;
+  document.getElementById('rcPct').textContent    = `${pct}% correct`;
+  document.getElementById('rcTime').textContent   = `Completed in ${elapsed}`;
+  document.getElementById('rcMsg').textContent    = msg;
   document.getElementById('roundComplete').hidden = false;
   document.getElementById('playBtn').hidden       = true;
   document.getElementById('replayBtn').disabled   = true;
@@ -536,17 +792,14 @@ function startNewRound() {
   document.getElementById('roundComplete').hidden = true;
   document.getElementById('playBtn').hidden       = false;
   document.getElementById('playBtn').disabled     = false;
-  document.getElementById('playBtn').textContent  = '\u25b6\u2002Play Interval';
+  document.getElementById('playBtn').textContent  =
+    `\u25b6\u2002Play ${getLevelLabel()}`;
   document.getElementById('replayBtn').disabled   = true;
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className   = 'feedback';
   document.getElementById('statTime').textContent = '\u2014';
 
-  document.querySelectorAll('.interval-btn').forEach(btn => {
-    btn.className = 'interval-btn';
-    btn.disabled  = true;
-  });
-
+  buildGrid();
   updateProgress();
 }
 
@@ -584,55 +837,136 @@ function updateProgress() {
   document.getElementById('questionCounter').textContent = label;
 }
 
-// ─── Build interval grid ──────────────────────────────────────────────────────
-(function buildGrid() {
+// ─── Build answer grid ────────────────────────────────────────────────────────
+function buildGrid() {
   const grid = document.getElementById('grid');
-  INTERVALS.forEach(interval => {
-    const btn = document.createElement('button');
-    btn.className         = 'interval-btn';
-    btn.dataset.semitones = interval.semitones;
-    btn.disabled          = true;
-    btn.innerHTML =
-      `<span class="int-short">${interval.short}</span>` +
-      `<span class="int-name">${interval.name}</span>`;
-    btn.addEventListener('click', () => resolveQuestion(interval.semitones));
-    grid.appendChild(btn);
-  });
-})();
+  grid.innerHTML = '';
+
+  if (level === 'intervals') {
+    grid.className = 'answer-grid cols-4';
+    INTERVALS.forEach(interval => {
+      const btn = document.createElement('button');
+      btn.className  = 'interval-btn';
+      btn.dataset.id = interval.semitones;
+      btn.disabled   = true;
+      btn.innerHTML  =
+        `<span class="int-short">${interval.short}</span>` +
+        `<span class="int-name">${interval.name}</span>`;
+      btn.addEventListener('click', () => resolveQuestion(interval.semitones));
+      grid.appendChild(btn);
+    });
+
+  } else if (level === 'triads') {
+    grid.className = 'answer-grid cols-2';
+    TRIADS.forEach(chord => {
+      const btn = document.createElement('button');
+      btn.className  = 'interval-btn';
+      btn.dataset.id = chord.id;
+      btn.disabled   = true;
+      btn.innerHTML  =
+        `<span class="int-short">${chord.short}</span>` +
+        `<span class="int-name">${chord.name}</span>`;
+      btn.addEventListener('click', () => resolveQuestion(chord.id));
+      grid.appendChild(btn);
+    });
+
+  } else {
+    grid.className = 'answer-grid cols-3';
+    SEVENTHS.forEach(chord => {
+      const btn = document.createElement('button');
+      btn.className  = 'interval-btn';
+      btn.dataset.id = chord.id;
+      btn.disabled   = true;
+      btn.innerHTML  =
+        `<span class="int-short">${chord.short}</span>` +
+        `<span class="int-name">${chord.name}</span>`;
+      btn.addEventListener('click', () => resolveQuestion(chord.id));
+      grid.appendChild(btn);
+    });
+  }
+}
+
+// Initial grid build
+buildGrid();
 
 // ─── Event wiring ─────────────────────────────────────────────────────────────
 document.getElementById('playBtn').addEventListener('click', () => {
   if (appState === 'active') {
-    resolveQuestion(null);
+    resolveQuestion(null);   // skip
   } else {
     newQuestion();
   }
 });
 
 document.getElementById('replayBtn').addEventListener('click', () => {
-  if (current) playInterval(current);
+  if (current) playCurrentQuestion();
 });
 
 document.getElementById('newRoundBtn').addEventListener('click', startNewRound);
 
-document.querySelectorAll('.mode-btn').forEach(btn => {
+document.querySelectorAll('[data-mode]').forEach(btn => {
   btn.addEventListener('click', () => {
     mode = btn.dataset.mode;
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
   });
 });
 
-const KEY_MAP = { '1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'0':10,'-':11,'=':12 };
+document.querySelectorAll('.level-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.level === level) return;
+    level = btn.dataset.level;
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // If mid-question, abandon it without counting it.
+    // All round counters, history, and timer carry over.
+    if (appState === 'active') {
+      appState = 'idle';
+      current  = null;
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('feedback').className   = 'feedback';
+      document.getElementById('replayBtn').disabled   = true;
+      document.getElementById('playBtn').textContent  =
+        `\u25b6\u2002Play ${getLevelLabel()}`;
+    }
+    document.getElementById('voicingRow').hidden = (level === 'intervals');
+    buildGrid();
+    updateProgress();
+  });
+});
+
+document.querySelectorAll('[data-voicing]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    voicing = btn.dataset.voicing;
+    document.querySelectorAll('[data-voicing]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Keyboard shortcuts
+const INTERVAL_KEY_MAP = {
+  '1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'0':10,'-':11,'=':12
+};
+
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'BUTTON') return;
+
   if (e.key === ' ' || e.key === 'Enter') {
     e.preventDefault();
     document.getElementById('playBtn').click();
     return;
   }
-  const s = KEY_MAP[e.key];
-  if (s !== undefined) resolveQuestion(s);
+
+  if (level === 'intervals') {
+    const s = INTERVAL_KEY_MAP[e.key];
+    if (s !== undefined) resolveQuestion(s);
+  } else if (level === 'triads') {
+    const idx = parseInt(e.key, 10) - 1;
+    if (idx >= 0 && idx < TRIADS.length) resolveQuestion(TRIADS[idx].id);
+  } else {
+    const idx = parseInt(e.key, 10) - 1;
+    if (idx >= 0 && idx < SEVENTHS.length) resolveQuestion(SEVENTHS[idx].id);
+  }
 });
 </script>
     <script src="otherDropdown.js"></script>
