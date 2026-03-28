@@ -1,0 +1,79 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <title>Alternative Protein Recommendations</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+    iframe { display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="now.html">Now</a>
+            <a href="music.html">Music</a>
+            <a href="favorites.html">Favorites</a>
+            <a href="blog.html">Blog</a>
+            <a href="college-consulting.html">College Consulting</a>
+            <div class="dropdown">
+                <button class="dropdown-btn">Projects</button>
+                <div class="dropdown-content">
+                    <a href="alternative-protein.html">Alternative Protein Recommendations</a>
+                    <a href="ear-training.html">Ear Training</a>
+                    <a href="how-i-write.html">How I Write</a>
+                    <a href="geometry-problems.html">Geometry Problems</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="header">
+        <h1>Alternative Protein Recommendations</h1>
+    </div>
+    <div class="container">
+        <p>
+            In 2024, I wrote an informal explainer on <a href="https://andrewwu.substack.com/p/alternative-proteins-antimicrobial">alternative proteins, antimicrobial resistance, and zoonotic spillovers</a>. 
+            Zoonotic spillovers involve the transmission of pathogens from nonhuman animals to humans, and beyond any ethical or climate change concerns relating to farmed animal agriculture,
+            farmed animal agriculture necessitates contact between humans and nonhuman animals, and thus increases the chance of zoonotic spillovers. Spillover events can be quite dangerous: they may be 
+            the culprit of "every viral pandemic that's occurred since the start of the twentieth century," as some scientists put it in <a href="https://www.nature.com/articles/d41586-022-01312-y">comment</a> in <i>Nature</i>.
+        </p>
+        <p>
+            Moreover modern animal agriculture necessitates feeding animals copious amounts of antibiotics. Again, even putting aside ethical concerns, these methods lead to increased antimicrobial resistance,
+            which, in plain language, is when our antibiotics become less and less effective at combating microorganisms.
+        </p>
+        <p>
+            I am personally a vegetarian (of three years), and I'm moving in the direction of veganism, too. (I stopped purchasing eggs and yogurt this year. I still sometimes consume animal products 
+            when I'm dining out, though I aim to minimize such consumption.) However, I do enjoy the taste and texture of meat. So I consume plenty of alternative proteins when given the chance.
+        </p>
+        <p>
+            Alternative proteins, in this context, are meat substitutes, often created from plants: <a href="https://www.beyondmeat.com/en-US/">Beyond Meat</a>, <a href="https://impossiblefoods.com/">Impossible Foods</a>,
+            <a href="https://www.gardein.com/">Gardein</a>, and <a href="https://www.morningstarfarms.com/en_US/home.html">Morningstar Farms</a> are some of the biggest, most well-known brands in the United
+            States right now. I'm no foodie. In fact, many of my friends often make fun of my taste. But I think most meat substitutes are quite decent these days.
+        </p>
+        <p>
+            How do they stack up to meat nutritionally? I like hitting the gym; I care about protein consumption. In fact, this is almost everyone's first question to me when they hear about my diet: how do I 
+            hit my protein targets? Animal meats contain about 30-40 grams of protein per 200 calories; as it turns out, there are some alternative protein products that reach these numbers. The question 
+            is less, then, strictly about protein, but also about the disadvantages of these alternatives—namely, that they are <a href="https://www.ncbi.nlm.nih.gov/books/NBK592376/">high in sodium 
+            and saturated fat.</a>
+        </p>
+        <p>
+            Below, I've plotted over 100 alternative protein products from the four aforementioned brands by every combination of the following four nutrients: protein, sodium, saturated fat, and fiber.
+            I've marked which products are Pareto optimal along each pair of axes. A product can be said to be Pareto optimal for protein and sodium if there is no other product that is better along both
+            the protein and sodium axes: that is, there is no other product that has more protein and less sodium than that product. So there can be many Pareto optimal products for any pair. For example,
+            <a href="https://www.morningstarfarms.com/en_US/products/meal-starters/morningstar-farms-chik-n-strips-product.htmlhttps://www.morningstarfarms.com/en_US/products/meal-starters/morningstar-farms-chik-n-strips-product.html">
+                Morningstar Farms Chik'n Strips
+            </a>, with 34g protein and 529mg sodium per 200 calories, and <a href="https://www.beyondmeat.com/en-US/products/beyond-steak">Beyond Steak</a>, with 25g protein and 353mg sodium per 200 calories,
+            are both Pareto optimal.
+        </p>
+    </div>
+
+    <iframe src="alt-protein-visualizations/protein_sodium.html" width="80%" height="500" frameborder="0"></iframe>
+    <iframe src="alt-protein-visualizations/protein_satfat.html" width="80%" height="500" frameborder="0"></iframe>
+    <iframe src="alt-protein-visualizations/protein_fiber.html" width="80%" height="500" frameborder="0"></iframe>
+    <iframe src="alt-protein-visualizations/sodium_satfat.html" width="80%" height="500" frameborder="0"></iframe>
+    <iframe src="alt-protein-visualizations/sodium_fiber.html" width="80%" height="500" frameborder="0"></iframe>
+    <iframe src="alt-protein-visualizations/satfat_fiber.html" width="80%" height="500" frameborder="0"></iframe>
+    
+    <script src="otherDropdown.js"></script>
+</body>
+</html>
