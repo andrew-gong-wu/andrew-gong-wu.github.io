@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Serenade</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="nav-container">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="now.html">Now</a>
+            <a href="favorites.html">Favorites</a>
+            <a href="music.html">Music</a>
+            <a href="writing.html">Writing</a>
+            <div class="dropdown">
+                <button class="dropdown-btn">Words & Sounds</button>
+                <div class="dropdown-content">
+                    <a href="serenade.html">Serenade</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-btn">College Consulting</button>
+                <div class="dropdown-content">
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="how-i-write.html">How I Write</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-btn">Projects</button>
+                <div class="dropdown-content">
+                    <a href="alternative-protein.html">Alternative Protein Recommendations</a>
+                    <a href="ear-training.html">Ear Training</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    
+    <audio id="player" src="music/Serenade.wav" preload="auto"></audio>
+
+
+    <div class="header">
+        <h1 id = "pieceTitle" style="cursor: pointer">Serenade</h1>
+    </div>
+
+    <div class="container">
+        <p style="font-size: 14px;"><i>(Headphones recommended. See <a href="https://andrewwu.substack.com/p/serenade">words</a>, <a href="https://www.youtube.com/watch?v=Y0iH_CnwJIU">sounds</a>. Desktop-only. Click to play.)</i></p>
+    </div>
+
+    <div class="container" id="words">
+        <script>
+            const sections = [
+                { text: "What comes before the first <i>I love you</i>?", start: 3},
+                { text: "Heartbeats.", start: 6.9, newParagraph: true},
+                { text: "First like the flickering of a candle,", start: 13.75},
+                { text: "weak", start: 21},
+                { text: "and", start: 22.15},
+                { text: "wavering,", start: 23.25},
+                { text: "then faster,", start: 28.25},
+                { text: "fluid,", start: 31},
+                { text: "swaying,", start: 32},
+                { text: "driven not by chance", start: 37.1},
+                { text: "but by conviction.", start: 44.3},
+                { text: "The heartbeats cascade over themselves;", start: 49.35},
+                { text: "the lover ruminates,", start: 54},
+                { text: "then they sing—", start: 56.5},
+                { text: "<i>I love you.</i>", start: 58.2, newParagraph: true},
+                { text: "It is a simple melody, built from a sequence of four ascending notes. A simple melody for a simple phrase with a simple meaning.", start: 61},
+                { text: "<i>I love you</i>, the lover sings again, this time with a different inflection;", start: 64.6},
+                { text: "then <i>I love you</i> once,", start: 70.9},
+                { text: "twice,", start: 74},
+                { text: "thrice more, and each time with something else in mind; a smile, a kind act, a midnight tryst.", start: 76.7},
+                { text: "<i>You</i>,", start: 78.3},
+                { text: "<i>you</i>,", start: 79.4},
+                { text: "<i>you</i> until the sounds become meaningless.</i>", start: 81},
+                { text: "Time passes. The heartbeats accelerate. Twos turn into threes.",  start: 84.8, newParagraph: true},
+                { text: "Are words not so temporary, so ineffectual?", start: 91.4},
+                { text: "How can the lover sing them so that their love knows it not once but continuously—forever? Why even try?", start: 97.9},
+                { text: "Threes turn into fours.", start: 102.55},
+                { text: "Fours are dizzying; <i>how does my love appear so composed, so graceful, when I cannot help but—</i>", start: 103.9},
+                { text: "<i>I love you</i> spills out, almost involuntarily, and as the lover sings they realize the words have changed.", start: 108, newParagraph: true},
+                { text: "The words are broader and warmer. They reverberate with the weight of shared meals and shared kisses and shared dreams.", start: 111},
+                { text: "<i>I love you</i>, a simple melody for a simple phrase.", start: 113.45},
+                { text: "<i>I love you</i> thrice more, and this time each repetition—<i>you, you, you</i>—seems more solid than the next, bringing more details into relief:", start: 118.1},
+                { text: "the way their love brushes their hair from their eyes;", start: 124.15},
+                { text: "the way their love tilts their head and blinks away their fatigue in the morning;", start: 125.45},
+                { text: "the way their love squeezes the lover’s hands when together, they map out their future, which seems so immense, so infinite.", start: 126.6},
+                { text: "Time passes.", start: 129.1, newParagraph: true},
+                { text: "As the lover and their love go about their lives, the shops and footpaths they so often frequent take on a certain density.", start: 139.4},
+                { text: "A coffeehouse is first for freshly-brewed coffee;", start: 141.9},
+                { text: "then for conversation;", start: 144.05},
+                { text: "even later for co-working, the lover’s music and their love’s painting or physics or poetry.", start: 146.25},
+                { text: "Time passes. Memories accumulate.", start: 148.6},
+                { text: "The words go unspoken, or are spoken every day and night.", start: 152},
+                { text: "Does it matter? Any limp repetition captures little of reality.", start: 154.5},
+                { text: "Flimsy as the words are,", start: 157},
+                { text: "the feelings they represent only intensify.", start: 159.5},
+                { text: "Around their love, the lover’s heartbeats become almost tangible, <i>material</i>,", start: 161},
+                { text: "like quakes from the footsteps of a giant—", start: 165.5},
+                { text: "<i>I love you</i> bursts from the lover’s chest.", start: 167, newParagraph: true},
+                { text: "The notes sweep through the once-still air and whip it into a whirlwind.", start: 171},
+                { text: "<i>I love you</i>, still the same four notes, but each word somehow more substantial than ever before, deep and full and heavy with harmony.", start: 175},
+                { text: "There is so much more <i>you</i> to love than when you were just a heartbeat and a smile.", start: 176.8},
+                { text: "Four times more the lover sings it, <i>I love you</i>, as if trying to grasp the enormity of the sentiment;", start: 179},
+                { text: "to the lover’s surprise, on the fifth,", start: 189.5},
+                { text: "heaven and earth echo fragments back to the pair, as if to reinforce the claim.", start: 192.5},
+                { text: "With relief at the acknowledgment, the lover lets their song fade.", start: 200},
+                { text: "The air stills.", start: 213},
+                { text: "Time passes.", start: 219, newParagraph: true},
+                { text: "<i>I love you</i>, whispers the lover.", start: 222, newParagraph: true},
+                { text: "It has been decades, perhaps a half-century.", start: 226},
+                { text: "<i>I love you</i>—sung so many times, always with a different lilt or thought or cadence—now seems to the lover a strange phrase.", start: 230},
+                { text: "After all, the memories are gone. It is just a melody they have always sung and must continue to sing to their love. And despite the lack of intent, their love understands the phrase as a simple, sweet statement of how things are.", start: 234},
+                { text: "<i>I love you,</i>", start: 238.8},
+                { text: "<i>I love you,</i>", start: 242.95},
+                { text: "<i>I love you,</i>", start: 247.3},
+                { text: "<i>I love you,</i>", start: 251.6},
+                { text: "<i>I love you—</i>", start: 255.5, noSpace: true},
+                { text: "<i>I love you.", start: 293},
+                { text: "Time passes.", start: 297.15, newParagraph: true},
+                { text: "Humans forget.", start: 305.15},
+                { text: "Words evolve.", start: 312.5},
+                { text: "Melodies erode.", start: 317.6},
+                { text: "But—still-familiar,", start: 321.55},
+                { text: "still-fluid—", start: 325.7, noSpace: true},
+                { text: "the heart", start: 330.5},
+                { text: "beats", start: 336.5},
+                { text: "as it", start: 343.8},
+                { text: "did", start: 350.9},
+                { text: "before.", start: 358}
+            ]
+        </script>
+    </div>
+
+    <script src="wordsAndSounds.js"></script>
+    <script src="otherDropdown.js"></script>
+</body>
+</html>
