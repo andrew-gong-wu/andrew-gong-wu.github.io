@@ -63,7 +63,41 @@
             <a href="https://cjquines.com/">CJ</a>, <a href="https://www.solomonge.com/">Solomon</a>, <a href="https://nancyzuo.com/">Nancy</a>, <a href="https://espenslettnes.net/">Espen</a>
         </details>
         <p>You can reach me at andrewgongwu (at) gmail (dot) com.</p>
+
+        <button class="score-button" id="moon-river-toggle" type="button" aria-label="Play Moon River" title="Click to play">
+            <img class="score" src="images/moon-river-first-line.png" alt="First line of Moon River, arranged for solo piano by Holden Mui" draggable="false">
+        </button>
+        <p class="score-caption" id="moon-river-caption"><i>Moon River, arr. Holden Mui</i></p>
+        <audio id="moon-river-audio" src="music/FINAL_Moon_River_Spotify.wav" preload="none"></audio>
     </div>
+
+    <script>
+        // click the score to play or pause Moon River
+        const moonRiverToggle = document.getElementById('moon-river-toggle');
+        const moonRiverAudio = document.getElementById('moon-river-audio');
+        const moonRiverCaption = document.getElementById('moon-river-caption');
+
+        moonRiverToggle.addEventListener('click', () => {
+            if (moonRiverAudio.paused) {
+                moonRiverAudio.play();
+                moonRiverToggle.title = 'Click to pause';
+            } else {
+                moonRiverAudio.pause();
+                moonRiverToggle.title = 'Click to play';
+            }
+            moonRiverCaption.classList.add('revealed'); // show the caption once the music has been started
+        });
+
+        moonRiverAudio.addEventListener('ended', () => {
+            moonRiverToggle.title = 'Click to play';
+        });
+
+        // stop the music when the visitor leaves the home page (also covers back/forward cache restores)
+        window.addEventListener('pagehide', () => {
+            moonRiverAudio.pause();
+            moonRiverAudio.currentTime = 0;
+        });
+    </script>
 
     <script src="otherDropdown.js"></script>
 </body>
