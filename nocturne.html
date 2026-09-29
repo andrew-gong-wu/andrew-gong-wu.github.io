@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nocturne</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="nav-container">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="now.html">Now</a>
+            <a href="favorites.html">Favorites</a>
+            <a href="music.html">Music</a>
+            <div class="dropdown">
+                <button class="dropdown-btn">Writing</button>
+                <div class="dropdown-content">
+                    <a href="writing.html">My own</a>
+                    <a href="writing-others.html">Others</a>
+                    <a href="serenade.html">Serenade</a>
+                    <a href="nocturne.html">Nocturne</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-btn">College Consulting</button>
+                <div class="dropdown-content">
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="how-i-write.html">How I Write</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-btn">Projects</button>
+                <div class="dropdown-content">
+                    <a href="alternative-protein.html">Alternative Protein Recommendations</a>
+                    <a href="ear-training.html">Ear Training</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    
+    <audio id="player" src="music/FINAL_Nocturne_Poetry.wav" preload="auto"></audio>
+
+
+    <div class="header">
+        <h1 id = "pieceTitle" style="cursor: pointer">Nocturne</h1>
+    </div>
+
+    <div class="container">
+        <p style="font-size: 14px;"><i>(Headphones recommended. Desktop-only. Click the title to play. The recording can also be found <a href="https://youtu.be/HeiXBqnf_EI?si=_1SNt9nWRBVxFpOK">here</a>.)</i></p>
+    </div>
+
+    <div class="container" id="words">
+        <script>
+            const sections = [
+                { text: "<i>Nocturne</i> opens monochromatically—the first phrase, built entirely from the white keys, comprises notes from a single Lydian scale.", start: 1},
+                { text: "In capturing beauty, the snapshot-aesthetic of dawn—kaleidoscopic, the sun bisected by the horizon—neglects its essence. Beauty is not from moments but from processes.", start: 4.3, newParagraph: true},
+                { text: "What is a gorgeous harmonic resolution without the preceding tension?", start: 11.5},
+                { text: "So <i>Nocturne</i> is dawn, and in reality dawn begins not with crimson or magenta, but with deep blue.", start: 15},
+                { text: "The next phrase brings us another color: ", start: 19.2, newParagraph: true},
+                { text: "perhaps royal purple,", start: 22.6},
+                { text: "still dark and steady.", start: 26.1},
+                { text: "Deep blue returns,", start: 34},
+                { text: "brightening imperceptibly.", start: 41},
+                { text: "In the final phrase of the opening, low grey clouds drift into view.", start: 48.5},
+                { text: "The phrase closes with a measure without a sustained bass note, without pedal—", start: 59.5, noSpace: true},
+                { text: "where the hazy, dusky colors give way for specks of pink.", start: 62},
+                { text: "Then the colors come all at once—", start: 65.3, newParagraph: true, noSpace: true},
+                { text: "after pinks come ambers, golds, violets, the world unfurling with increased urgency and intensity.", start: 68.5},
+                { text: "The sun appears;", start: 71.9},
+                { text: "ascends,", start: 84.5},
+                { text: "from a single-voice melody to octaves;", start: 87},
+                { text: "at its climax, becomes too bright to behold.", start: 94.5},
+                { text: "One must look away.", start: 100},
+                { text: "But light creeps", start: 107},
+                { text: "around corners,", start: 113},
+                { text: "flashes across waters;", start: 118},
+                { text: "it insists—", start: 124},
+                { text: "A variant on the opening theme returns, in a higher register, marked by a sparkling broken-octaves accompaniment—", start: 129, newParagraph: true, noSpace: true},
+                { text: "morning’s bells, or birdsong.", start: 134.5},
+                { text: "Blue again, but brighter.", start: 140},
+                { text: "Sunrise is asymmetric.", start: 151},
+                { text: "Whereas previously the east surged, luminous, the west proceeds unhurriedly.", start: 162.8},
+                { text: "<i>Nocturne</i>, originally from French, means <i>of the night</i>;", start: 186, newParagraph: true},
+                { text: "thus its closing heralds day.", start: 191.5},
+                { text: "The sun’s theme appears one last time—", start: 197, noSpace: true},
+                { text: "now without its restless accompaniment, the horizon’s other hues and textures—", start: 201.6, noSpace: true},
+                { text: "in radiant octaves that leave the world suspended in adulation.", start: 205},
+                { text: "There <i>is</i> beauty in moments, after all.", start: 215},
+                { text: "Then the stars,", start: 224, newParagraph: true},
+                { text: "twinkling", start: 227},
+                { text: "as they do in the fairytales,", start: 229.5},
+                { text: "wave", start: 232},
+                { text: "goodbye.", start: 234}
+            ]
+        </script>
+    </div>
+
+    <script src="wordsAndSounds.js"></script>
+    <script src="otherDropdown.js"></script>
+</body>
+</html>
