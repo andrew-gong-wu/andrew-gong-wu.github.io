@@ -5,6 +5,23 @@
     padding: 0;
 }
 
+.align-right {
+  text-align: right;
+}
+
+/* Pull each attribution closer to its fragment */
+.container p.align-right {
+  margin-top: -0.5em;
+}
+
+/* Separator after each attribution, except the last one on the page */
+.container p.align-right:not(:last-child)::after {
+  content: "\266A\FE0E";   /* ♪, with \FE0E asking for text style, not emoji */
+  display: block;
+  text-align: center;
+  margin: 2.5em 0 1.5em;
+}
+
 body{
     font-family: 'EB Garamond';
     font-size: 19px;
