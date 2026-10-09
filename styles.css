@@ -10,8 +10,9 @@
     --content-width: min(1300px, 75vw);
 }
 
-/* on phones, use the full width (the 48px side padding still applies) */
-@media (max-width: 768px) {
+/* on phones/tablets and narrow windows, use the full width (the 48px side padding still applies).
+   pointer: coarse catches touchscreens, since without a viewport meta tag phones report ~980px wide */
+@media (max-width: 768px), (pointer: coarse) {
     :root {
         --content-width: none;
     }
