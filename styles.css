@@ -51,7 +51,7 @@ nav{
     padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1100px;
+    max-width: 1200px;
     line-height: 175%
 }
 
@@ -62,7 +62,7 @@ nav{
     padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1100px;
+    max-width: 1200px;
 }
 
 /* used to enclose the accordions - may reformat later */
@@ -72,14 +72,16 @@ nav{
     padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1100px;
+    max-width: 1200px;
     line-height: 175%
 }
 
 /* used to add padding on paragraphs for when accordions are open */
-.accordion details[open] p {
-    padding-top: 24px;  
-    padding-bottom: 24px;  
+.accordion details[open] p:first-of-type {
+    padding-top: 24px;
+}
+.accordion details[open] p:last-of-type {
+    padding-bottom: 24px;
 }
 
 /* formatting for unordered lists to align bullets themselves with the rest of the text */
@@ -96,6 +98,11 @@ li {
 p {
     line-height: 1.8;
     margin-bottom: 8px;
+}
+
+/* extra space between consecutive paragraphs */
+p + p {
+    margin-top: 1em;
 }
 
 /* changes the font to black */
@@ -172,7 +179,7 @@ nav a {
 /* holds essay and sidebar */
 .annotated-container {
     display: flex; /* make a flexbox */
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 16px;
     padding-left: 48px;
