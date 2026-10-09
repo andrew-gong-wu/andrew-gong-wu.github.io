@@ -5,6 +5,18 @@
     padding: 0;
 }
 
+/* content width: 75% of the screen, capped at 1300px, so laptops get side margins too */
+:root {
+    --content-width: min(1300px, 75vw);
+}
+
+/* on phones, use the full width (the 48px side padding still applies) */
+@media (max-width: 768px) {
+    :root {
+        --content-width: none;
+    }
+}
+
 .align-right {
   text-align: right;
 }
@@ -51,7 +63,7 @@ nav{
     padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1200px;
+    max-width: var(--content-width);
     line-height: 175%
 }
 
@@ -62,7 +74,7 @@ nav{
     padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1200px;
+    max-width: var(--content-width);
 }
 
 /* used to enclose the accordions - may reformat later */
@@ -72,7 +84,7 @@ nav{
     padding-right: 48px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1200px;
+    max-width: var(--content-width);
     line-height: 175%
 }
 
@@ -179,7 +191,7 @@ nav a {
 /* holds essay and sidebar */
 .annotated-container {
     display: flex; /* make a flexbox */
-    max-width: 1200px;
+    max-width: var(--content-width);
     margin: 0 auto;
     padding: 16px;
     padding-left: 48px;
